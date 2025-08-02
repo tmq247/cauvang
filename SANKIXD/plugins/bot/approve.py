@@ -61,16 +61,6 @@ font_path = "SANKIXD/assets/hiroko.ttf"
 chat_id_env = environ.get("CHAT_ID")
 CHAT_ID = [int(app) for app in chat_id_env.split(",")] if chat_id_env else []
 
-TEXT = environ.get("APPROVED_WELCOME_TEXT", "**❅─────✧❅✦❅✧─────❅**\n**🥀ʜᴇʏ {mention}**\n\n**🏓ᴡᴇʟᴄᴏᴍᴇ ɪɴ ɴᴇᴡ ɢʀᴏᴜᴘ✨**\n\n**➻** {title}\n\n**💞ɴᴏᴡ ᴍᴀᴋᴇ ɴᴇᴡ ғʀɪᴇɴᴅs ᴀɴᴅ sᴛᴀʏ ᴀʟᴡᴀʏs ᴏɴʟɪɴᴇ ɪɴ ᴛʜɪs ɢʀᴏᴜᴘ🥳**\n**❅─────✧❅✦❅✧─────❅**")
-APPROVED = environ.get("APPROVED_WELCOME", "off").lower()
-
-# List of random photo links
-random_photo_links = [
-    "https://telegra.ph/file/ca950c0b8316b968957fa.jpg",
-    "https://telegra.ph/file/ca950c0b8316b968957fa.jpg",
-    "https://telegra.ph/file/ca950c0b8316b968957fa.jpg",
-    # Add more links as needed
-]
 
 # Define an event handler for chat join requests
 @app.on_chat_join_request((filters.group | filters.channel) & filters.chat(CHAT_ID) if CHAT_ID else (filters.group | filters.channel))
