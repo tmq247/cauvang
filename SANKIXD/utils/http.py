@@ -23,7 +23,7 @@ SOFTWARE.
 """
 from asyncio import gather
 
-from wbb import aiohttpsession as session
+from SANKIXD import aiohttpsession as session
 
 
 async def get(url: str, *args, **kwargs):
