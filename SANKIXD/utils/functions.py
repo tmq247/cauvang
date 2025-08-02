@@ -40,15 +40,15 @@ from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message
 from pyrogram import utils
 
-from wbb import aiohttpsession as aiosession
-from wbb.utils.dbfunctions import start_restart_stage
-from wbb.utils.http import get, post
+from SANKIXD import aiohttpsession as aiosession
+#from wbb.utils.dbfunctions import start_restart_stage
+from SANKIXD.utils.http import get, post
 
 
-async def restart(m: Message):
+'''async def restart(m: Message):
     if m:
         await start_restart_stage(m.chat.id, m.id)
-    execvp(executable, [executable, "-m", "wbb"])
+    execvp(executable, [executable, "-m", "wbb"])'''
 
 
 def generate_captcha():
