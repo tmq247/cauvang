@@ -171,4 +171,4 @@ async def stop(client, message):
         return
     
     await stop_db(chat_id, filter_name)
-    await message.reply(f"Tôi đã tắt `{filter_name}`.")
+    await message.reply(f"Tôi đã tắt bộ lọc `{filter_name}`.")
