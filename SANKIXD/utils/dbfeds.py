@@ -186,6 +186,87 @@ async def check_banned_user(fed_id, user_id):
                 return {"reason": user.get("reason"), "date": user.get("date")}
 
     return False
+###############
+
+
+async def add_fmute_user(fed_id, user_id, reason):
+    current_date = datetime.now(pytz.timezone("Asia/Kolkata")).strftime(
+        "%Y-%m-%d %H:%M"
+    )
+    await fedsdb.update_one(
+        {"fed_id": fed_id},
+        {
+            "$push": {
+                "muted_users": {
+                    "user_id": int(user_id),
+                    "reason": reason,
+                    "date": current_date,
+                }
+            }
+        },
+        upsert=True,
+    )
+
+
+async def remove_fmute_user(fed_id, user_id):
+    await fedsdb.update_one(
+        {"fed_id": fed_id},
+        {"$pull": {"muted_users": {"user_id": int(user_id)}}},
+    )
+
+
+async def check_muted_user(fed_id, user_id):
+    result = await fedsdb.find_one(
+        {"fed_id": fed_id, "muted_users.user_id": user_id}
+    )
+    if result and "muted_users" in result:
+        for user in result["muted_users"]:
+            if user.get("user_id") == user_id:
+                return {"reason": user.get("reason"), "date": user.get("date")}
+
+    return False
+
+####
+async def add_active_user(fed_id, user_id, reason):
+    current_date = datetime.now(pytz.timezone("Asia/Kolkata")).strftime(
+        "%Y-%m-%d %H:%M"
+    )
+    await fedsdb.update_one(
+        {"fed_id": fed_id},
+        {
+            "$push": {
+                "actived_users": {
+                    "user_id": int(user_id),
+                    "reason": reason,
+                    "date": current_date,
+                }
+            }
+        },
+        upsert=True,
+    )
+
+
+async def remove_actived_user(fed_id, user_id):
+    await fedsdb.update_one(
+        {"fed_id": fed_id},
+        {"$pull": {"actived_users": {"user_id": int(user_id)}}},
+    )
+
+
+async def check_actived_user(fed_id, user_id):
+    result = await fedsdb.find_one(
+        {"fed_id": fed_id, "actived_users.user_id": user_id}
+    )
+    if result and "actived_users" in result:
+        for user in result["actived_users"]:
+            if user.get("user_id") == user_id:
+                return {"reason": user.get("reason"), "date": user.get("date")}
+
+    return False
+
+####
+
+
 
 
 async def get_user_fstatus(user_id):
