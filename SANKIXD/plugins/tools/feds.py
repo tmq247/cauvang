@@ -980,7 +980,7 @@ async def fmute_user(client, message):
             lydo_text = f"""
     **🔥Người dùng {user.mention} @{username2} đã bị cấm chat 👙.**
     **Bởi: {from_user.mention} @{username1}.**
-    **Lý do: Xác thực giọng nói với admin {reason or from_user.mention} để được mở chat  💬💬💬.**""")
+    **Lý do: Xác thực giọng nói với admin {reason or from_user.mention} để được mở chat  💬💬💬.**"""
             nut = F"tg://openmessage?user_id={from_user.id}"
             keyboard = ikb({"🚨  LIÊN HỆ ADMIN  🚨": {nut}})
             await m.edit(text=lydo_text, reply_markup=keyboard)
