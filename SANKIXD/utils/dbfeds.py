@@ -2,7 +2,8 @@ from datetime import datetime
 
 import pytz
 
-from SANKIXD import db
+from SANKIXD.core.mongo import mongodb as db
+
 from SANKIXD.misc import SUDOERS
 fedsdb = db.feds
 
