@@ -15,7 +15,7 @@ heroku()
 app = SANKI()
 api = SafoneAPI()
 userbot = Userbot()
-
+aiohttpsession = ClientSession()
 from .platforms import *
 
 Apple = AppleAPI()
