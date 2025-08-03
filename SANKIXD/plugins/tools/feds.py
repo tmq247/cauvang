@@ -864,18 +864,25 @@ async def fmute_user(client, message):
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     if user_id in all_admins or user_id in SUDOERS:
         return await message.reply_text("Tôi không thể cấm chat người dùng đó.")
-    check_user = await check_muted_user(fed_id, user_id)
+    check_user = await check_banned_user(fed_id, user_id)
     if check_user:
         reason = check_user["reason"]
         date = check_user["date"]
         return await message.reply_text(
+            f"**Người dùng {user.mention} đã bị Cấm trong liên đoàn.\n\nLý do: {reason}.\nNgày: {date}.**"
+        )
+    check_user1 = await check_muted_user(fed_id, user_id)
+    if check_user1:
+        reason = check_user1["reason"]
+        date = check_user1["date"]
+        return await message.reply_text(
             f"**Người dùng {user.mention} đã bị Cấm chat trong liên đoàn.\n\nLý do: {reason}.\nNgày: {date}.**"
         )
-    check_user1 = await check_actived_user(fed_id, user_id)
+    check_user2 = await check_actived_user(fed_id, user_id)
     if message.command[0] == "checkvoice":
-        if check_user1:
-            reason = check_user1["reason"]
-            date = check_user1["date"]
+        if check_user2:
+            reason = check_user2["reason"]
+            date = check_user2["date"]
             return await message.reply_text(
                 f"**Người dùng {user.mention} đã được xác thực trong liên đoàn.\n\nNote: {reason}.\nNgày: {date}.**"
             )
@@ -1021,11 +1028,28 @@ async def funmute_user(client, message):
         return await message.reply_text(
             "**Làm sao một quản trị viên có thể bị cấm chat!.**"
         )
-    check_user = await check_muted_user(fed_id, user_id)
-    if not check_user:
+    check_user = await check_banned_user(fed_id, user_id)
+    if check_user:
+        reason = check_user["reason"]
+        date = check_user["date"]
         return await message.reply_text(
-            "**Tôi không thể bỏ lệnh cấm chat một người dùng chưa bao giờ bị cấm chat.**"
+            f"**Người dùng {user.mention} đã bị Cấm trong liên đoàn.\n\nLý do: {reason}.\nNgày: {date}.**"
         )
+    check_user1 = await check_muted_user(fed_id, user_id)
+    if check_user1:
+        reason = check_user1["reason"]
+        date = check_user1["date"]
+        return await message.reply_text(
+            f"**Người dùng {user.mention} đã bị Cấm chat trong liên đoàn.\n\nLý do: {reason}.\nNgày: {date}.**"
+        )
+    if message.command[0][0] == "a":
+        check_user2 = await check_actived_user(fed_id, user_id)
+        if check_user2:
+            reason = check_user2["reason"]
+            date = check_user2["date"]
+            return await message.reply_text(
+                f"**Người dùng {user.mention} đã được xác thực trong liên đoàn.\n\nNote: {reason}.\nNgày: {date}.**"
+            )
     if not reason:
         return await message.reply("Không có lý do nào được cung cấp.")
 
@@ -1034,9 +1058,9 @@ async def funmute_user(client, message):
         f"**Bỏ Lệnh Cấm chat liên đoàn {user.mention}!**"
         + f" **Hành động này sẽ mất khoảng {len(served_chats)} giây.**"
     )
-    await remove_fmute_user(fed_id, user_id)
     if message.command[0][0] == "a":
         await add_active_user(fed_id, user_id, reason)
+    await remove_fmute_user(fed_id, user_id)
     number_of_chats = 0
     for served_chat in served_chats:
         try:
@@ -1045,9 +1069,7 @@ async def funmute_user(client, message):
                 await app.unban_chat_member(served_chat, user.id)
                 if served_chat != chat.id:
                     if not message.text.startswith("/s"):
-                        await app.send_message(
-                            served_chat, f"**Đã bỏ cấm trong liên đoàn :{user.mention} !**"
-                        )
+                        await app.send_message(served_chat, f"**Đã bỏ cấm trong liên đoàn :{user.mention} !**")
                 number_of_chats += 1
             await asyncio.sleep(1)
         except FloodWait as e:
@@ -1085,8 +1107,186 @@ __**Lệnh bỏ cấm chat liên đoàn mới**__
             "Người dùng unfmute, nhưng hành động Fban này không được ghi lại, hãy thêm tôi vào LOG_GROUP"
         )
 
-
 ##############
+
+#unactive
+@app.on_message(filters.command("huyxacnhan"))
+@capture_err
+async def unactive_user(client, message):
+    chat = message.chat
+    from_user = message.from_user
+    if message.chat.type == ChatType.PRIVATE:
+        return await message.reply_text(
+            "Lệnh này dùng trong nhóm, không phải trong tin nhắn riêng của tôi!."
+        )
+
+    fed_id = await get_fed_id(chat.id)
+    if not fed_id:
+        return await message.reply_text(
+            "**Cuộc trò chuyện này không thuộc bất kỳ liên đoàn nào."
+        )
+    info = await get_fed_info(fed_id)
+    fed_owner = info["owner_id"]
+    fed_admins = info["fadmins"]
+    all_admins = [fed_owner] + fed_admins + [int(BOT_ID)]
+    if from_user.id in all_admins or from_user.id in SUDOERS:
+        pass
+    else:
+        return await message.reply_text(
+            "Bạn cần phải là Admin liên đoàn để sử dụng lệnh này"
+        )
+    if len(message.command) < 2:
+        return await message.reply_text(
+            "**Bạn cần phải chỉ định người dùng hoặc trả lời tin nhắn của họ!**"
+        )
+    user_id, reason = await extract_user_and_reason(message)
+    user = await app.get_users(user_id)
+    if not user_id:
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
+    #if user_id in all_admins or user_id in SUDOERS:
+        #return await message.reply_text(
+           # "**Làm sao một quản trị viên có thể bị cấm!.**"
+        #)
+    check_user = await check_actived_user(fed_id, user_id)
+    if not check_user:
+        return await message.reply_text(
+            "**Nguời dùng này chưa được xác thực.**"
+        )
+
+    await remove_actived_user(fed_id, user_id)
+    await message.reply_text(f"Đã bỏ xác thực {user.mention} trong liên đoàn!")
+    ban_text = f"""
+__**Lệnh bỏ xác thực liên đoàn mới**__
+**Nguồn gốc:** {message.chat.title} [`{message.chat.id}`]
+**Quản trị viên:** {from_user.mention}
+**Người dùng được bỏ xác thực:** {user.mention} **ID:** `{user_id}`
+**Lý do:** __{reason}__"""
+    try:
+        m2 = await app.send_message(
+            info["log_group_id"],
+            text=ban_text,
+            disable_web_page_preview=True,
+        )
+    except Exception:
+        await message.reply_text(
+            "Người dùng unactive, nhưng hành động unactive này không được ghi lại, hãy thêm tôi vào LOG_GROUP"
+        )
+#xacnhan
+@app.on_message(filters.command("xacnhan"))
+@capture_err
+async def active_user(client, message):
+    chat = message.chat
+    from_user = message.from_user
+    if message.chat.type == ChatType.PRIVATE:
+        return await message.reply_text(
+            "Lệnh này dùng trong nhóm, không phải trong tin nhắn riêng của tôi!."
+        )
+
+    fed_id = await get_fed_id(chat.id)
+    if not fed_id:
+        return await message.reply_text(
+            "**Cuộc trò chuyện này không thuộc bất kỳ liên đoàn nào."
+        )
+    info = await get_fed_info(fed_id)
+    fed_owner = info["owner_id"]
+    fed_admins = info["fadmins"]
+    all_admins = [fed_owner] + fed_admins + [int(BOT_ID)]
+    if from_user.id in all_admins or from_user.id in SUDOERS:
+        pass
+    else:
+        return await message.reply_text(
+            "Bạn cần phải là Admin liên đoàn để sử dụng lệnh này"
+        )
+    if len(message.command) < 2:
+        return await message.reply_text(
+            "**Bạn cần phải chỉ định người dùng hoặc trả lời tin nhắn của họ!**"
+        )
+    user_id, reason = await extract_user_and_reason(message)
+    user = await app.get_users(user_id)
+    if not user_id:
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
+    #if user_id in all_admins or user_id in SUDOERS:
+        #return await message.reply_text(
+           # "**Làm sao một quản trị viên có thể bị cấm!.**"
+        #)
+    check_user = await check_banned_user(fed_id, user_id)
+    if check_user:
+        reason = check_user["reason"]
+        date = check_user["date"]
+        return await message.reply_text(
+            f"**Người dùng {user.mention} đã bị Cấm trong liên đoàn.\n\nLý do: {reason}.\nNgày: {date}.**"
+        )
+    check_user1 = await check_muted_user(fed_id, user_id)
+    if check_user1:
+        reason = check_user1["reason"]
+        date = check_user1["date"]
+        return await message.reply_text(
+            f"**Người dùng {user.mention} đã bị Cấm chat trong liên đoàn.\n\nLý do: {reason}.\nNgày: {date}.**"
+        )
+    check_user2 = await check_actived_user(fed_id, user_id)
+    if check_user2:
+        reason = check_user2["reason"]
+        date = check_user2["date"]
+        return await message.reply_text(
+            f"**Người dùng {user.mention} đã được xác thực trong liên đoàn.\n\nNote: {reason}.\nNgày: {date}.**"
+        )
+
+    await add_active_user(fed_id, user_id, reason)
+    await message.reply_text(f"Đã xác thực {user.mention} trong liên đoàn!")
+    ban_text = f"""
+__**Lệnh xác thực liên đoàn mới**__
+**Nguồn gốc:** {message.chat.title} [`{message.chat.id}`]
+**Quản trị viên:** {from_user.mention}
+**Người dùng được xác thực:** {user.mention} **ID:** `{user_id}`
+**Lý do:** __{reason}__"""
+    try:
+        m2 = await app.send_message(
+            info["log_group_id"],
+            text=ban_text,
+            disable_web_page_preview=True,
+        )
+    except Exception:
+        await message.reply_text(
+            "Người dùng được active, nhưng hành động active này không được ghi lại, hãy thêm tôi vào LOG_GROUP"
+        )
+##############
+#check
+@app.on_message(filters.command("check") & ~filters.private)
+async def check(_, message: Message):
+    user_id = await extract_user(message)
+    from_user = message.from_user
+    if not user_id:
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
+    user = await app.get_users(user_id)
+
+    check_user = await check_banned_user(fed_id, user_id)
+    if check_user:
+        reason = check_user["reason"]
+        date = check_user["date"]
+        return await message.reply_text(
+            f"**Người dùng {user.mention} đã bị Cấm trong liên đoàn.\n\nLý do: {reason}.\nNgày: {date}.**"
+        )
+    check_user1 = await check_muted_user(fed_id, user_id)
+    if check_user1:
+        reason = check_user1["reason"]
+        date = check_user1["date"]
+        return await message.reply_text(
+            f"**Người dùng {user.mention} đã bị Cấm chat trong liên đoàn.\n\nLý do: {reason}.\nNgày: {date}.**"
+        )
+    check_user2 = await check_actived_user(fed_id, user_id)
+    if check_user2:
+        reason = check_user2["reason"]
+        date = check_user2["date"]
+        return await message.reply_text(
+            f"**Người dùng {user.mention} đã được xác thực trong liên đoàn.\n\nNote: {reason}.\nNgày: {date}.**"
+        )
+
+    else:
+        await message.reply_text("Người này chưa được xác nhận.")
+
+
+
+################        
 #Funban
 @app.on_message(filters.command(["unfban", "sunfban"]))
 @capture_err
