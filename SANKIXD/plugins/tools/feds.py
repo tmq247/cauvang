@@ -991,7 +991,7 @@ async def fmute_user(client, message):
 
 #Funmute
 
-@app.on_message(filters.command(["unfmute", "sunfmute", "aunfmute]))
+@app.on_message(filters.command(["unfmute", "sunfmute", "aunfmute"]))
 @capture_err
 async def funmute_user(client, message):
     chat = message.chat
