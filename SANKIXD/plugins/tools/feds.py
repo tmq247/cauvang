@@ -8,7 +8,7 @@ from pyrogram.enums import ChatMemberStatus, ChatType, ParseMode
 from pyrogram.errors import FloodWait, PeerIdInvalid, ChatAdminRequired
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from SANKIXD import BOT_ID, LOGGER_ID, SUDOERS, app, userbot 
+from SANKIXD import LOGGER_ID, SUDOERS, app, userbot 
 from SANKIXD.utils.errors import capture_err
 from SANKIXD.utils.dbfeds import *
 from SANKIXD.utils.functions import extract_user, extract_user_and_reason
