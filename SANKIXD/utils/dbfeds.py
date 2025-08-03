@@ -2,8 +2,8 @@ from datetime import datetime
 
 import pytz
 
-from wbb import SUDOERS, db
-
+from wbb import db
+from SANKIXD.misc import SUDOERS
 fedsdb = db.feds
 
 
