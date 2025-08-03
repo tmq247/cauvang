@@ -8,7 +8,7 @@ from pyrogram.enums import ChatMemberStatus, ChatType, ParseMode
 from pyrogram.errors import FloodWait, PeerIdInvalid, ChatAdminRequired
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from SANKIXD import BOT_ID, LOGGER_ID, SUDOERS, app
+from SANKIXD import BOT_ID, LOGGER_ID, SUDOERS, app, userbot 
 from SANKIXD.utils.errors import capture_err
 from SANKIXD.utils.dbfeds import *
 from SANKIXD.utils.functions import extract_user, extract_user_and_reason
@@ -746,6 +746,348 @@ __**Lệnh cấm liên đoàn mới**__
         )
 
 
+#fdelete
+
+@app.on_message(filters.command("fdel"))
+@capture_err
+async def fdel(client, message):
+    chat = message.chat
+    from_user = message.from_user
+    if message.chat.type == ChatType.PRIVATE:
+        return await message.reply_text(
+            "Lệnh này dùng trong nhóm, không phải trong tin nhắn riêng của tôi!."
+        )
+
+    fed_id = await get_fed_id(chat.id)
+    if not fed_id:
+        return await message.reply_text(
+            "**Cuộc trò chuyện này không thuộc bất kỳ liên đoàn nào."
+        )
+    info = await get_fed_info(fed_id)
+    fed_owner = info["owner_id"]
+    fed_admins = info["fadmins"]
+    all_admins = [fed_owner] + fed_admins + [int(BOT_ID)]
+    if from_user.id in all_admins or from_user.id in SUDOERS:
+        pass
+    else:
+        return await message.reply_text(
+            "Bạn cần phải là Admin liên đoàn để sử dụng lệnh này"
+        )
+    if len(message.command) < 2:
+        return await message.reply_text(
+            "**Bạn cần chỉ định người dùng hoặc trả lời tin nhắn của họ!**"
+        )
+    user_id = await extract_user(message)
+    try:
+        user = await app.get_users(user_id)
+    except PeerIdInvalid:
+        return await message.reply_msg("Xin lỗi, tôi chưa từng gặp người dùng này.")
+    if not user_id:
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
+    if user_id in SUDOERS:
+        return await message.reply_text("Tôi không thể xóa tin nhắn người dùng đó.")
+
+    served_chats, _ = await chat_id_and_names_in_fed(fed_id)
+    m = await message.reply_text(
+        f"**Loading!**"
+        + f" **Hành động này sẽ mất khoảng {len(served_chats)} giây.**"
+    )
+    number_of_chats = 0
+    for served_chat in served_chats:
+        try:
+            chat_member = await app.get_chat_member(served_chat, user.id)
+            if chat_member.status == ChatMemberStatus.MEMBER:
+                await userbot.delete_user_history(served_chat, user.id)
+                if served_chat != chat.id:
+                    if not message.text.startswith("/s"):
+                        await app.send_message(
+                            served_chat, f"**Bị xóa tin nhắn trong liên đoàn :{user.mention} !**"
+                        )
+                number_of_chats += 1
+            await asyncio.sleep(1)
+        except FloodWait as e:
+            await asyncio.sleep(int(e.value))
+        except Exception:
+            pass
+    await m.edit(f"Đã xóa tin nhắn trong liên đoàn: {user.mention} !")
+    try:
+        await m.edit(
+            f"Đã xóa tin nhắn {user.mention} trong liên đoàn !\nNhật ký hành động: {m2.link}",
+            disable_web_page_preview=True,
+        )
+    except Exception:
+        await message.reply_text(
+            "Người dùng bị Fdel, nhưng hành động Fdel này không được ghi lại, hãy thêm tôi vào LOG_GROUP"
+        )
+    await asyncio.sleep(10)
+    await app.delete_messages(message.chat.id, m.id, revoke=True,)
+
+#Fmute
+
+@app.on_message(filters.command(["fmute", "sfmute", "checkvoice"]) & ~filters.private)
+@capture_err
+async def fmute_user(client, message):
+    chat = message.chat
+    from_user = message.from_user
+    link2 = f"tg://openmessage?user_id="
+    link = f"t.me/"
+    if message.chat.type == ChatType.PRIVATE:
+        return await message.reply_text(
+            "Lệnh này dùng trong nhóm, không phải trong tin nhắn riêng của tôi!."
+        )
+
+    fed_id = await get_fed_id(chat.id)
+    if not fed_id:
+        return await message.reply_text(
+            "**Cuộc trò chuyện này không thuộc bất kỳ liên đoàn nào."
+        )
+    info = await get_fed_info(fed_id)
+    fed_owner = info["owner_id"]
+    fed_admins = info["fadmins"]
+    all_admins = [fed_owner] + fed_admins + [int(BOT_ID)]
+    if from_user.id in all_admins or from_user.id in SUDOERS:
+        pass
+    else:
+        return await message.reply_text(
+            "Bạn cần phải là Admin liên đoàn để sử dụng lệnh này"
+        )
+    if len(message.command) < 2:
+        return await message.reply_text(
+            "**Bạn cần chỉ định người dùng hoặc trả lời tin nhắn của họ!**"
+        )
+    user_id, reason = await extract_user_and_reason(message)
+    try:
+        user = await app.get_users(user_id)
+    except PeerIdInvalid:
+        return await message.reply_msg("Xin lỗi, tôi chưa từng gặp người dùng này.")
+    if not user_id:
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
+    if user_id in all_admins or user_id in SUDOERS:
+        return await message.reply_text("Tôi không thể cấm chat người dùng đó.")
+    check_user = await check_muted_user(fed_id, user_id)
+    if check_user:
+        reason = check_user["reason"]
+        date = check_user["date"]
+        return await message.reply_text(
+            f"**Người dùng {user.mention} đã bị Cấm chat trong liên đoàn.\n\nLý do: {reason}.\nNgày: {date}.**"
+        )
+    check_user1 = await check_actived_user(fed_id, user_id)
+    if message.command[0] == "checkvoice":
+        if check_user1:
+            reason = check_user1["reason"]
+            date = check_user1["date"]
+            return await message.reply_text(
+                f"**Người dùng {user.mention} đã được xác thực trong liên đoàn.\n\nNote: {reason}.\nNgày: {date}.**"
+            )
+    #if not reason:
+        #return await message.reply("Không có lý do nào được cung cấp.")
+
+    served_chats, _ = await chat_id_and_names_in_fed(fed_id)
+    m = await message.reply_text(
+        f"**Loading {user.mention}!**"
+        + f" **Hành động này sẽ mất khoảng {len(served_chats)} giây.**"
+    )
+    await add_fmute_user(fed_id, user_id, reason)
+    number_of_chats = 0
+    for served_chat in served_chats:
+        try:
+            chat_member = await app.get_chat_member(served_chat, user.id)
+            if chat_member.status == ChatMemberStatus.MEMBER:
+                await app.restrict_chat_member(served_chat, user.id, permissions=ChatPermissions())
+                if served_chat != chat.id:
+                    if not message.text.startswith("/s"):
+                        await app.send_message(
+                            served_chat, f"**Done.**"
+                        )
+                number_of_chats += 1
+            await asyncio.sleep(1)
+        except FloodWait as e:
+            await asyncio.sleep(int(e.value))
+        except Exception:
+            pass
+    username1 = from_user.username
+    username2 = user.username 
+    if message.command[0][0] == "f":
+        try:
+            await app.send_message(user.id, f"Xin chào {user.mention}, bạn đã bị cấm chat tại nhóm {message.chat.title} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} t.me/{username1} để mở chat.")
+        except Exception:
+            pass
+        await m.edit(f"Đã cấm chat {user.mention} trong liên đoàn!")
+        mute_text = f"""
+    __**Người dùng bị fmute toàn hệ thống **__
+    **Tại nhóm:** {message.chat.title} [`{message.chat.id}`]
+    **Quản trị viên:** {from_user.mention} @{username1}
+    **Người dùng bị cấm chat:** {user.mention} @{username2} **ID:** `{user_id}`
+    **Lý do:** __{reason}__
+    **Lúc:** __{timestamp_vietnam}__
+    **Số nhóm:** `{number_of_chats}`"""
+        try:
+            m2 = await app.send_message(info["log_group_id"], text=mute_text, disable_web_page_preview=True)
+            lydo_text = f"""
+    **🔥Người dùng {user.mention} @{username2} đã bị đeo rọ mõm 👙.**
+    **Bởi: {from_user.mention} @{username1}.**
+    **Lý do: __{reason}__.**"""
+            nut = F"tg://openmessage?user_id={from_user.id}"
+            keyboard = ikb({"🚨  LIÊN HỆ ADMIN  🚨": {nut}})
+            await m.edit(text=lydo_text, reply_markup=keyboard)
+        except Exception:
+            await message.reply_text(
+                "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
+            )
+    if message.command[0][0] == "s":
+        try:
+            await app.send_message(user.id, f"Xin chào {user.mention}, bạn đã bị cấm chat tại nhóm {message.chat.title} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} t.me/{username1} để mở chat.")
+        except Exception:
+            pass
+        mute_text = f"""
+    __**Người dùng bị sfmute toàn hệ thống **__
+    **Tại nhóm:** {message.chat.title} [`{message.chat.id}`]
+    **Quản trị viên:** {from_user.mention} @{username1}
+    **Người dùng bị cấm chat:** {user.mention} @{username2} **ID:** `{user_id}`
+    **Lý do:** __{reason}__
+    **Lúc:** __{timestamp_vietnam}__
+    **Số nhóm:** `{number_of_chats}`"""
+        try:
+            m2 = await app.send_message(info["log_group_id"], text=mute_text, disable_web_page_preview=True)
+        except Exception:
+            await message.reply_text(
+                "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
+            )
+
+    if message.command[0] == "checkvoice":
+        try:
+            await app.send_message(user.id, f"Xin chào {user.mention}, bạn đã bị cấm chat tại nhóm {message.chat.title}, bạn hãy xác thực bằng giọng nói cho admin {from_user.mention} t.me/{username1} để mở chat.")
+        except Exception:
+            pass
+        #await app2.send_message(user.id, f"Xin chào, bạn đã bị cấm chat tại nhóm {message.chat.title} với lý do: {reason}, bạn hãy nhắn tin cho admin {from_user.mention} @{username1} để mở chat.")
+        await m.edit(f"Đã cấm chat {user.mention} trong liên đoàn!")
+        mute_text = f"""
+    __**Người dùng bị fmute chờ checkvoice toàn hệ thống **__
+    **Tại nhóm:** {message.chat.title} [`{message.chat.id}`]
+    **Quản trị viên:** {from_user.mention} @{username1}
+    **Người dùng bị cấm chat:** {user.mention} @{username2} **ID:** `{user_id}`
+    **Lý do:** __{reason}__
+    **Số nhóm:** `{number_of_chats}`"""
+        try:
+            m2 = await app.send_message(info["log_group_id"], text=mute_text, disable_web_page_preview=True)
+            lydo_text = f"""
+    **🔥Người dùng {user.mention} @{username2} đã bị cấm chat 👙.**
+    **Bởi: {from_user.mention} @{username1}.**
+    **Lý do: Xác thực giọng nói với admin {reason or from_user.mention} để được mở chat  💬💬💬.**""")
+            nut = F"tg://openmessage?user_id={from_user.id}"
+            keyboard = ikb({"🚨  LIÊN HỆ ADMIN  🚨": {nut}})
+            await m.edit(text=lydo_text, reply_markup=keyboard)
+        except Exception:
+            await message.reply_text(
+                "Người dùng bị cấm chat, nhưng hành động cấm chat này không được ghi lại, hãy thêm tôi vào nhóm quản lý"
+            )
+
+#Funmute
+
+@app.on_message(filters.command(["unfmute", "sunfmute", "aunfmute]))
+@capture_err
+async def funmute_user(client, message):
+    chat = message.chat
+    from_user = message.from_user
+    if message.chat.type == ChatType.PRIVATE:
+        return await message.reply_text(
+            "Lệnh này dùng trong nhóm, không phải trong tin nhắn riêng của tôi!."
+        )
+
+    fed_id = await get_fed_id(chat.id)
+    if not fed_id:
+        return await message.reply_text(
+            "**Cuộc trò chuyện này không thuộc bất kỳ liên đoàn nào."
+        )
+    info = await get_fed_info(fed_id)
+    fed_owner = info["owner_id"]
+    fed_admins = info["fadmins"]
+    all_admins = [fed_owner] + fed_admins + [int(BOT_ID)]
+    if from_user.id in all_admins or from_user.id in SUDOERS:
+        pass
+    else:
+        return await message.reply_text(
+            "Bạn cần phải là Admin liên đoàn để sử dụng lệnh này"
+        )
+    if len(message.command) < 2:
+        return await message.reply_text(
+            "**Bạn cần phải chỉ định người dùng hoặc trả lời tin nhắn của họ!**"
+        )
+    user_id, reason = await extract_user_and_reason(message)
+    user = await app.get_users(user_id)
+    if not user_id:
+        return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
+    if user_id in all_admins or user_id in SUDOERS:
+        return await message.reply_text(
+            "**Làm sao một quản trị viên có thể bị cấm chat!.**"
+        )
+    check_user = await check_muted_user(fed_id, user_id)
+    if not check_user:
+        return await message.reply_text(
+            "**Tôi không thể bỏ lệnh cấm chat một người dùng chưa bao giờ bị cấm chat.**"
+        )
+    if not reason:
+        return await message.reply("Không có lý do nào được cung cấp.")
+
+    served_chats, _ = await chat_id_and_names_in_fed(fed_id)
+    m = await message.reply_text(
+        f"**Bỏ Lệnh Cấm chat liên đoàn {user.mention}!**"
+        + f" **Hành động này sẽ mất khoảng {len(served_chats)} giây.**"
+    )
+    await remove_fmute_user(fed_id, user_id)
+    if message.command[0][0] == "a":
+        await add_active_user(fed_id, user_id, reason)
+    number_of_chats = 0
+    for served_chat in served_chats:
+        try:
+            chat_member = await app.get_chat_member(served_chat, user.id)
+            if chat_member.status == ChatMemberStatus.BANNED:
+                await app.unban_chat_member(served_chat, user.id)
+                if served_chat != chat.id:
+                    if not message.text.startswith("/s"):
+                        await app.send_message(
+                            served_chat, f"**Đã bỏ cấm trong liên đoàn :{user.mention} !**"
+                        )
+                number_of_chats += 1
+            await asyncio.sleep(1)
+        except FloodWait as e:
+            await asyncio.sleep(int(e.value))
+        except Exception:
+            pass
+    try:
+        await app.send_message(
+            user.id,
+            f"Xin chào, Bạn đã được bỏ cấm chat bởi {from_user.mention},"
+            + " Bạn có thể cảm ơn họ vì hành động này.",
+        )
+    except Exception:
+        pass
+    await m.edit(f"Đã bỏ cấm chat trong liên đoàn :{user.mention} !")
+    ban_text = f"""
+__**Lệnh bỏ cấm chat liên đoàn mới**__
+**Nguồn gốc:** {message.chat.title} [`{message.chat.id}`]
+**Quản trị viên:** {from_user.mention}
+**Người dùng được bỏ cấm:** {user.mention} **ID:** `{user_id}`
+**Lý do:** __{reason}__
+**Số lượng nhóm:** `{number_of_chats}`"""
+    try:
+        m2 = await app.send_message(
+            info["log_group_id"],
+            text=ban_text,
+            disable_web_page_preview=True,
+        )
+        await m.edit(
+            f"Đã bỏ cấm chat trong liên đoàn {user.mention} !\nNhật ký hành động: {m2.link}",
+            disable_web_page_preview=True,
+        )
+    except Exception:
+        await message.reply_text(
+            "Người dùng unfmute, nhưng hành động Fban này không được ghi lại, hãy thêm tôi vào LOG_GROUP"
+        )
+
+
+##############
+#Funban
 @app.on_message(filters.command(["unfban", "sunfban"]))
 @capture_err
 async def funban_user(client, message):
@@ -1009,7 +1351,7 @@ async def fed_owner_help(client, cb):
  • /myfeds**:** Để liệt kê các liên đoàn mà bạn đã tạo
  • /fedtransfer <người được chuyển nhượng> <ID_liên đoàn>**:**Để chuyển nhượng quyền sở hữu liên đoàn cho người khác
  • /fpromote <user>**:** Chỉ định người dùng làm quản trị viên liên đoàn. Cho phép tất cả các lệnh cho người dùng theo `Lệnh cho QTV liên đoàn`
- • /fdemote <user>**:** Xóa Người dùng khỏi Liên đoàn quản trị thành Người dùng bình thường
+ • /fdemote <user>**:** Xóa Người dùng khỏi quản trị Liên đoàn thành Người dùng bình thường
  • /setfedlog <ID_liên đoàn>**:** Đặt nhóm làm cơ sở báo cáo nhật ký được cung cấp cho liên đoàn
  • /unsetfedlog <fed_id>**:** Xóa nhóm làm cơ sở báo cáo nhật ký được cung cấp cho liên đoàn
  • /fbroadcast **:** Phát tin nhắn đến tất cả các nhóm đã tham gia liên đoàn của bạn """
@@ -1019,6 +1361,7 @@ async def fed_owner_help(client, cb):
  • /sfban**:** cấm người dùng mà không gửi thông báo đến cuộc trò chuyện
  • /unfban <user> <reason>**:** Xóa người dùng khỏi lệnh cấm của liên đoàn
  • /sunfban**:** Bỏ cấm người dùng mà không gửi thông báo
+ • /fdel**:** xóa tất cả tin nhắn của một người trong các nhóm thuộc liên đoàn
  • /fedadmins**:** Hiển thị quản trị viên Liên đoàn
  • /fedchats <Fed_ID>**:** Nhận tất cả các cuộc trò chuyện được kết nối trong Liên đoàn
  • /fbroadcast **:** Phát tin nhắn đến tất cả các nhóm đã tham gia liên đoàn của bạn
