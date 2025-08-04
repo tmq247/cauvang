@@ -22,8 +22,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 from asyncio import gather
-
-from SANKIXD import aiohttpsession as session
+from aiohttp import ClientSession as session
+#from SANKIXD import aiohttpsession as session
 
 
 async def get(url: str, *args, **kwargs):
