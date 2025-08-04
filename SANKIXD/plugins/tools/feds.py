@@ -24,7 +24,7 @@ Nhưng sau đó, bạn có nhiều nhóm và bạn không muốn kẻ gửi thư
 Bạn thậm chí có thể chỉ định quản trị viên liên kết, để quản trị viên đáng tin cậy của bạn có thể cấm tất cả những kẻ gửi thư rác khỏi các cuộc trò chuyện mà bạn muốn bảo vệ.\n\n
 """
 me = app.get_me()
-#BOT_ID = await me.id
+BOT_ID = (await me.id)
 SUPPORT_CHAT = "@muoimuoimusicbot"
 
 
