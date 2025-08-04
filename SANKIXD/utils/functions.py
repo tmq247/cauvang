@@ -40,7 +40,7 @@ from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message
 from pyrogram import utils
 
-#from SANKIXD import aiohttpsession as aiosession
+from SANKIXD import aiohttpsession as aiosession
 #from wbb.utils.dbfunctions import start_restart_stage
 from SANKIXD.utils.http import get, post
 
