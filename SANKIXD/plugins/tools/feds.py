@@ -25,8 +25,8 @@ Bạn thậm chí có thể chỉ định quản trị viên liên kết, để 
 """
 
 SUPPORT_CHAT = "@muoimuoimusicbot"
-x = app.get_me()
-BOT_ID = x.id
+me = app.get_me()
+#BOT_ID = me.id
 
 @app.on_message(filters.command("newfed"))
 @capture_err
@@ -431,6 +431,7 @@ async def leave_fed(client, message):
 async def fed_chat(client, message):
     chat = message.chat
     user = message.from_user
+    BOT_ID = me.id
     if message.chat.type != ChatType.PRIVATE:
         return await message.reply_text(
             "Danh sách nhóm thuộc liên đoàn chỉ có thể được kiểm tra bằng cách nhắn tin riêng cho tôi."
@@ -650,6 +651,7 @@ async def fdemote(client, message):
 async def fban_user(client, message):
     chat = message.chat
     from_user = message.from_user
+    BOT_ID = me.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
             "Lệnh này dùng trong nhóm, không phải trong tin nhắn riêng của tôi!."
@@ -756,6 +758,7 @@ __**Lệnh cấm liên đoàn mới**__
 async def fdel(client, message):
     chat = message.chat
     from_user = message.from_user
+    BOT_ID = me.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
             "Lệnh này dùng trong nhóm, không phải trong tin nhắn riêng của tôi!."
@@ -832,6 +835,7 @@ async def fdel(client, message):
 async def fmute_user(client, message):
     chat = message.chat
     from_user = message.from_user
+    BOT_ID = me.id
     link2 = f"tg://openmessage?user_id="
     link = f"t.me/"
     if message.chat.type == ChatType.PRIVATE:
@@ -999,6 +1003,7 @@ async def fmute_user(client, message):
 async def funmute_user(client, message):
     chat = message.chat
     from_user = message.from_user
+    BOT_ID = me.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
             "Lệnh này dùng trong nhóm, không phải trong tin nhắn riêng của tôi!."
@@ -1118,6 +1123,7 @@ __**Lệnh bỏ cấm chat liên đoàn mới**__
 async def unactive_user(client, message):
     chat = message.chat
     from_user = message.from_user
+    BOT_ID = me.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
             "Lệnh này dùng trong nhóm, không phải trong tin nhắn riêng của tôi!."
@@ -1178,7 +1184,7 @@ __**Lệnh bỏ xác thực liên đoàn mới**__
 @app.on_message(filters.command("xacnhan"))
 @capture_err
 async def active_user(client, message):
-    BOT_ID = await me.id
+    BOT_ID = me.id
     chat = message.chat
     from_user = message.from_user
     if message.chat.type == ChatType.PRIVATE:
@@ -1297,6 +1303,7 @@ async def check(client, message):
 async def funban_user(client, message):
     chat = message.chat
     from_user = message.from_user
+    BOT_ID = me.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
             "Lệnh này dùng trong nhóm, không phải trong tin nhắn riêng của tôi!."
@@ -1453,6 +1460,7 @@ async def fedstat(client, message):
 async def fbroadcast_message(client, message):
     chat = message.chat
     from_user = message.from_user
+    BOT_ID = me.id
     reply_message = message.reply_to_message
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
