@@ -431,7 +431,7 @@ async def leave_fed(client, message):
 async def fed_chat(client, message):
     chat = message.chat
     user = message.from_user
-    BOT_ID = me.id
+    BOT_ID = await me.id
     if message.chat.type != ChatType.PRIVATE:
         return await message.reply_text(
             "Danh sách nhóm thuộc liên đoàn chỉ có thể được kiểm tra bằng cách nhắn tin riêng cho tôi."
