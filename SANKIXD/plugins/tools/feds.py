@@ -25,7 +25,8 @@ Bạn thậm chí có thể chỉ định quản trị viên liên kết, để 
 """
 
 SUPPORT_CHAT = "@muoimuoimusicbot"
-
+x = app.get_me()
+BOT_ID = x.id
 
 @app.on_message(filters.command("newfed"))
 @capture_err
