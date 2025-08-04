@@ -1256,7 +1256,7 @@ __**Lệnh xác thực liên đoàn mới**__
 ##############
 #check
 @app.on_message(filters.command("check") & ~filters.private)
-async def check(_, message: Message):
+async def check(client, message):
     user_id = await extract_user(message)
     from_user = message.from_user
     if not user_id:
