@@ -16,6 +16,8 @@ heroku()
 app = SANKI()
 api = SafoneAPI()
 userbot = Userbot()
+x = app.get_me()
+BOT_ID = x.id
 #aiohttpsession = ClientSession()
 
 from .platforms import *
