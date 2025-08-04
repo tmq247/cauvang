@@ -11,7 +11,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from config import LOGGER_ID as LOG_GROUP_ID
 from SANKIXD.misc import SUDOERS
 
-from SANKIXD import app, userbot 
+from SANKIXD import app, userbot, BOT_ID
 from SANKIXD.utils.errors import capture_err
 from SANKIXD.utils.dbfeds import *
 from SANKIXD.utils.functions import extract_user, extract_user_and_reason
@@ -23,8 +23,7 @@ Nhưng sau đó, bạn có nhiều nhóm và bạn không muốn kẻ gửi thư
 **Không còn nữa!** Với Liên kết, bạn có thể thực hiện lệnh cấm trong một cuộc trò chuyện chồng chéo với tất cả các cuộc trò chuyện khác.\n
 Bạn thậm chí có thể chỉ định quản trị viên liên kết, để quản trị viên đáng tin cậy của bạn có thể cấm tất cả những kẻ gửi thư rác khỏi các cuộc trò chuyện mà bạn muốn bảo vệ.\n\n
 """
-me = app.get_me()
-BOT_ID = (await me.id)
+
 SUPPORT_CHAT = "@muoimuoimusicbot"
 
 
