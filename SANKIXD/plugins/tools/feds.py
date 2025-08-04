@@ -7,7 +7,13 @@ from pyrogram import filters
 from pyrogram.enums import ChatMemberStatus, ChatType, ParseMode
 from pyrogram.errors import FloodWait, PeerIdInvalid, ChatAdminRequired
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-
+from pyrogram.types import (
+    CallbackQuery,
+    ChatMemberUpdated,
+    ChatPermissions,
+    ChatPrivileges,
+    Message,
+)
 from config import LOGGER_ID as LOG_GROUP_ID
 from SANKIXD.misc import SUDOERS
 
@@ -325,6 +331,7 @@ async def fed_chat(client, message):
 
 
 @app.on_message(filters.command("joinfed"))
+@adminsOnly("can_promote_members", "can_change_info")
 @capture_err
 async def join_fed(client, message):
     chat = message.chat
@@ -340,7 +347,7 @@ async def join_fed(client, message):
     if user.id in SUDOERS:
         pass
     else:
-        if member.status == ChatMemberStatus.OWNER:
+        if member.status == ChatMemberStatus.OWNER or ChatMemberStatus.ADMINISTRATOR:
             pass
         else:
             return await message.reply_text(
