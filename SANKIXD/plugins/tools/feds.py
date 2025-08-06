@@ -339,7 +339,7 @@ async def join_fed(client, message):
             "Lệnh này dùng trong nhóm, không phải trong tin nhắn riêng của tôi!",
         )
 
-    member = await app.get_chat_member(chat.id, user.id).privileges
+    member = await app.get_chat_member(chat.id, user.id)
     fed_id = await get_fed_id(int(chat.id))
 
     if user.id in SUDOERS:
