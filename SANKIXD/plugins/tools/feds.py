@@ -339,8 +339,7 @@ async def join_fed(client, message):
             "Lệnh này dùng trong nhóm, không phải trong tin nhắn riêng của tôi!",
         )
 
-    member = await app.get_chat_member(chat.id, user.id)
-    member1.privileges
+    member = await app.get_chat_member(chat.id, user.id).privileges
     fed_id = await get_fed_id(int(chat.id))
 
     if user.id in SUDOERS:
@@ -348,14 +347,14 @@ async def join_fed(client, message):
     else:
         if member.status == ChatMemberStatus.OWNER or ChatMemberStatus.ADMINISTRATOR:
             required_permissions = [
-            member1.can_change_info,
-            member1.can_delete_messages,
-            member1.can_invite_users,
-            member1.can_restrict_members,
-            member1.can_pin_messages,
-            member1.can_promote_members,
-            member1.can_manage_chat,
-            member1.can_manage_video_chats,
+            member.can_change_info,
+            member.can_delete_messages,
+            member.can_invite_users,
+            member.can_restrict_members,
+            member.can_pin_messages,
+            member.can_promote_members,
+            member.can_manage_chat,
+            member.can_manage_video_chats,
         ]
             if not all(required_permissions):
                 return await message.reply_text("Bạn cần có tất cả các quyền quản trị viên trong nhóm để sử dụng lệnh này!")
