@@ -348,6 +348,18 @@ async def join_fed(client, message):
         pass
     else:
         if member.status == ChatMemberStatus.OWNER or ChatMemberStatus.ADMINISTRATOR:
+            required_permissions = [
+            member.can_change_info,
+            member.can_delete_messages,
+            member.can_invite_users,
+            member.can_restrict_members,
+            member.can_pin_messages,
+            member.can_promote_members,
+            member.can_manage_chat,
+            member.can_manage_video_chats,
+        ]
+            if not all(required_permissions):
+                return await message.reply_text("Bạn cần có tất cả các quyền quản trị viên trong nhóm để sử dụng lệnh này!")
             pass
         else:
             return await message.reply_text(
