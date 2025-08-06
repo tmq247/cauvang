@@ -39,7 +39,7 @@ class temp:
 @app.on_chat_member_updated(filters.group, group=-3)
 async def greet_group(_, member: ChatMemberUpdated):
     chat = member.chat.id
-    A = await wlcm.find_one(chat_id)
+    A = await wlcm.find_one(chat.id)
     if (
         not member.new_chat_member
         or member.new_chat_member.status in {"banned", "left", "restricted"}
