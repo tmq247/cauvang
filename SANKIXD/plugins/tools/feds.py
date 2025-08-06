@@ -331,7 +331,6 @@ async def fed_chat(client, message):
 
 
 @app.on_message(filters.command("joinfed"))
-@adminsOnly("can_promote_members", "can_change_info")
 @capture_err
 async def join_fed(client, message):
     chat = message.chat
