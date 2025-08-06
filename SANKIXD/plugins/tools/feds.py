@@ -31,7 +31,6 @@ Bạn thậm chí có thể chỉ định quản trị viên liên kết, để 
 """
 
 SUPPORT_CHAT = "@muoimuoimusicbot"
-me = app.get_me()
 #BOT_ID = me.id
 
 @app.on_message(filters.command("newfed"))
@@ -341,6 +340,7 @@ async def join_fed(client, message):
         )
 
     member = await app.get_chat_member(chat.id, user.id)
+    member1.privileges
     fed_id = await get_fed_id(int(chat.id))
 
     if user.id in SUDOERS:
@@ -348,14 +348,14 @@ async def join_fed(client, message):
     else:
         if member.status == ChatMemberStatus.OWNER or ChatMemberStatus.ADMINISTRATOR:
             required_permissions = [
-            member.can_change_info,
-            member.can_delete_messages,
-            member.can_invite_users,
-            member.can_restrict_members,
-            member.can_pin_messages,
-            member.can_promote_members,
-            member.can_manage_chat,
-            member.can_manage_video_chats,
+            member1.can_change_info,
+            member1.can_delete_messages,
+            member1.can_invite_users,
+            member1.can_restrict_members,
+            member1.can_pin_messages,
+            member1.can_promote_members,
+            member1.can_manage_chat,
+            member1.can_manage_video_chats,
         ]
             if not all(required_permissions):
                 return await message.reply_text("Bạn cần có tất cả các quyền quản trị viên trong nhóm để sử dụng lệnh này!")
@@ -449,7 +449,8 @@ async def leave_fed(client, message):
 async def fed_chat(client, message):
     chat = message.chat
     user = message.from_user
-    BOT_ID = await me.id
+    me = await app.get_me()
+    BOT_ID = me.id
     if message.chat.type != ChatType.PRIVATE:
         return await message.reply_text(
             "Danh sách nhóm thuộc liên đoàn chỉ có thể được kiểm tra bằng cách nhắn tin riêng cho tôi."
@@ -669,6 +670,7 @@ async def fdemote(client, message):
 async def fban_user(client, message):
     chat = message.chat
     from_user = message.from_user
+    me = await app.get_me()
     BOT_ID = me.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
@@ -776,6 +778,7 @@ __**Lệnh cấm liên đoàn mới**__
 async def fdel(client, message):
     chat = message.chat
     from_user = message.from_user
+    me = await app.get_me()
     BOT_ID = me.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
@@ -853,6 +856,7 @@ async def fdel(client, message):
 async def fmute_user(client, message):
     chat = message.chat
     from_user = message.from_user
+    me = await app.get_me()
     BOT_ID = me.id
     link2 = f"tg://openmessage?user_id="
     link = f"t.me/"
@@ -1021,6 +1025,7 @@ async def fmute_user(client, message):
 async def funmute_user(client, message):
     chat = message.chat
     from_user = message.from_user
+    me = await app.get_me()
     BOT_ID = me.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
@@ -1141,6 +1146,7 @@ __**Lệnh bỏ cấm chat liên đoàn mới**__
 async def unactive_user(client, message):
     chat = message.chat
     from_user = message.from_user
+    me = await app.get_me()
     BOT_ID = me.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
@@ -1202,6 +1208,7 @@ __**Lệnh bỏ xác thực liên đoàn mới**__
 @app.on_message(filters.command("xacnhan"))
 @capture_err
 async def active_user(client, message):
+    me = await app.get_me()
     BOT_ID = me.id
     chat = message.chat
     from_user = message.from_user
@@ -1321,6 +1328,7 @@ async def check(client, message):
 async def funban_user(client, message):
     chat = message.chat
     from_user = message.from_user
+    me = await app.get_me()
     BOT_ID = me.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
@@ -1478,6 +1486,7 @@ async def fedstat(client, message):
 async def fbroadcast_message(client, message):
     chat = message.chat
     from_user = message.from_user
+    me = await app.get_me()
     BOT_ID = me.id
     reply_message = message.reply_to_message
     if message.chat.type == ChatType.PRIVATE:
