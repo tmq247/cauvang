@@ -1600,6 +1600,10 @@ async def fed_owner_help(client, cb):
  • /unfban <user> <reason>**:** Xóa người dùng khỏi lệnh cấm của liên đoàn
  • /sunfban**:** Bỏ cấm người dùng mà không gửi thông báo
  • /fdel**:** xóa tất cả tin nhắn của một người trong các nhóm thuộc liên đoàn
+ • /fmute <user> <reason>**:** cấm chat một người dùng
+ • /sfmute**:** cấm chat một người dùng mà không gửi thông báo
+ • /unfmute <user> <reason>**:** Xóa người dùng khỏi lệnh cấm chat của liên đoàn
+ • /sunfmute**:** Bỏ cấm chat người dùng mà không gửi thông báo
  • /fedadmins**:** Hiển thị quản trị viên Liên đoàn
  • /fedchats <Fed_ID>**:** Nhận tất cả các cuộc trò chuyện được kết nối trong Liên đoàn
  • /fbroadcast **:** Phát tin nhắn đến tất cả các nhóm đã tham gia liên đoàn của bạn
