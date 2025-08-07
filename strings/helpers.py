@@ -135,11 +135,11 @@ HELP_13 = """
 /seekback [ᴅᴜʀᴀᴛɪᴏɴ ɪɴ sᴇᴄᴏɴᴅs] : ʙᴀᴄᴋᴡᴀʀᴅ sᴇᴇᴋ ᴛʜᴇ sᴛʀᴇᴀᴍ ᴛᴏ ᴛʜᴇ ᴛʜᴇ ɢɪᴠᴇɴ ᴅᴜʀᴀᴛɪᴏɴ.
 """
 
-HELP_14 = """
-<b><u>sᴏɴɢ ᴅᴏᴡɴʟᴏᴀᴅ</b></u>
+#"""HELP_14 = """
+#<b><u>sᴏɴɢ ᴅᴏᴡɴʟᴏᴀᴅ</b></u>
 
-/song [sᴏɴɢ ɴᴀᴍᴇ/ʏᴛ ᴜʀʟ] : ᴅᴏᴡɴʟᴏᴀᴅ ᴀɴʏ ᴛʀᴀᴄᴋ ғʀᴏᴍ ʏᴏᴜᴛᴜʙᴇ ɪɴ ᴍᴘ3 ᴏʀ ᴍᴘ4 ғᴏʀᴍᴀᴛs.
-"""
+#/song [sᴏɴɢ ɴᴀᴍᴇ/ʏᴛ ᴜʀʟ] : ᴅᴏᴡɴʟᴏᴀᴅ ᴀɴʏ ᴛʀᴀᴄᴋ ғʀᴏᴍ ʏᴏᴜᴛᴜʙᴇ ɪɴ ᴍᴘ3 ᴏʀ ᴍᴘ4 ғᴏʀᴍᴀᴛs.
+#"""
 
 HELP_15 = """
 <b><u>sᴘᴇᴇᴅ ᴄᴏᴍᴍᴀɴᴅs :</b></u>
@@ -149,3 +149,49 @@ HELP_15 = """
 /speed or /playback : ғᴏʀ ᴀᴅᴊᴜsᴛɪɴɢ ᴛʜᴇ ᴀᴜᴅɪᴏ ᴘʟᴀʏʙᴀᴄᴋ sᴘᴇᴇᴅ ɪɴ ɢʀᴏᴜᴘ.
 /cspeed or /cplayback : ғᴏʀ ᴀᴅᴊᴜsᴛɪɴɢ ᴛʜᴇ ᴀᴜᴅɪᴏ ᴘʟᴀʏʙᴀᴄᴋ sᴘᴇᴇᴅ ɪɴ ᴄʜᴀɴɴᴇʟ.
 """
+
+
+
+  #  if data == "owner":
+HELP_14 = """
+**👑 Lệnh cho chủ sở hữu liên đoàn:**
+ • /newfed <tên_liên đoàn>**:** Tạo một Liên đoàn, Mỗi người dùng được phép tạo một Liên đoàn
+ • /renamefed <ID_liên đoàn> <Tên_Mới_Của liên đoàn>**:** Đổi tên của liên đoàn thành tên mới bằng cách cung cấp ID
+ • /delfed <ID_liên đoàn>**:** Xóa Liên đoàn và mọi thông tin liên quan đến nó. Sẽ không hủy người dùng bị cấm
+ • /myfeds**:** Để liệt kê các liên đoàn mà bạn đã tạo
+ • /fedtransfer <người được chuyển nhượng> <ID_liên đoàn>**:**Để chuyển nhượng quyền sở hữu liên đoàn cho người khác
+ • /fpromote <user>**:** Chỉ định người dùng làm quản trị viên liên đoàn. Cho phép tất cả các lệnh cho người dùng theo `Lệnh cho QTV liên đoàn`
+ • /fdemote <user>**:** Xóa Người dùng khỏi quản trị Liên đoàn thành Người dùng bình thường
+ • /setfedlog <ID_liên đoàn>**:** Đặt nhóm làm cơ sở báo cáo nhật ký được cung cấp cho liên đoàn
+ • /unsetfedlog <fed_id>**:** Xóa nhóm làm cơ sở báo cáo nhật ký được cung cấp cho liên đoàn
+ • /fbroadcast **:** Phát tin nhắn đến tất cả các nhóm đã tham gia liên đoàn của bạn 
+  
+**🔱 Lệnh cho QTV liên đoàn:**
+ • /fban <user> <reason>**:** cấm một người dùng
+ • /sfban**:** cấm người dùng mà không gửi thông báo đến cuộc trò chuyện
+ • /unfban <user> <reason>**:** Xóa người dùng khỏi lệnh cấm của liên đoàn
+ • /sunfban**:** Bỏ cấm người dùng mà không gửi thông báo
+ • /fdel**:** xóa tất cả tin nhắn của một người trong các nhóm thuộc liên đoàn
+ • /fmute <user> <reason>**:** cấm chat một người dùng
+ • /sfmute**:** cấm chat một người dùng mà không gửi thông báo
+ • /unfmute <user> <reason>**:** Xóa người dùng khỏi lệnh cấm chat của liên đoàn
+ • /sunfmute**:** Bỏ cấm chat người dùng mà không gửi thông báo
+ • /fedadmins**:** Hiển thị quản trị viên Liên đoàn
+ • /fedchats <Fed_ID>**:** Nhận tất cả các cuộc trò chuyện được kết nối trong Liên đoàn
+ • /fbroadcast **:** Phát tin nhắn đến tất cả các nhóm đã tham gia liên đoàn của bạn
+ • /check**:** kiểm tra người dùng
+ • /xacnhan**:** xác nhận đã checkvoice người dùng
+ • /huy**:** hủy xác nhận người dùng
+
+**Lệnh người dùng:**
+• /fedinfo <Fed_ID>: Thông tin về một liên đoàn.
+• /fedadmins <Fed_ID>: Liệt kê các quản trị viên trong một liên đoàn.
+• /joinfed <Fed_ID>: Tham gia nhóm hiện tại vào một liên đoàn. Một nhóm chỉ có thể tham gia một liên đoàn. Chỉ dành cho chủ sở hữu nhóm.
+• /leavefed: Rời khỏi liên đoàn hiện tại. Chỉ chủ sở hữu nhóm mới có thể thực hiện việc này.
+• /fedstat: Liệt kê tất cả các liên đoàn mà bạn đã bị cấm.
+• /fedstat <user_ID>: Liệt kê tất cả các liên đoàn mà người dùng đã bị cấm.
+• /fedstat <Fed_ID>: Cung cấp thông tin về lệnh cấm của bạn trong liên đoàn.
+• /fedstat <user_ID> <FedID>: Cung cấp thông tin về lệnh cấm của người dùng trong liên đoàn.
+• /chatfed: Thông tin về liên đoàn nơi cuộc trò chuyện hiện tại đang diễn ra.
+"""
+    
