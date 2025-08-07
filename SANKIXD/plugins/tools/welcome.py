@@ -50,14 +50,14 @@ async def greet_group(_, member: ChatMemberUpdated):
     try:
         fed_id = await get_fed_id(chat.id)
         if fed_id:
-            check_user = await check_banned_user(fed_id, member.id)
+            check_user = await check_banned_user(fed_id, user.id)
             if check_user:
                 reason = check_user["reason"]
                 date = check_user["date"]
-                await chat.ban_member(member.id)
+                await chat.ban_member(user.id)
                 return await app.send_message(
                     chat.id,
-                    f"**Người dùng {member.mention} đã bị fban.\n\nLý do: {reason}.\nNgày: {date}.**",
+                    f"**Người dùng {user.mention} đã bị fban.\n\nLý do: {reason}.\nNgày: {date}.**",
                 )
     except ChatAdminRequired:
         return
