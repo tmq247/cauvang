@@ -180,8 +180,9 @@ HELP_14 = """
  • /fedchats <Fed_ID>**:** Nhận tất cả các cuộc trò chuyện được kết nối trong Liên đoàn
  • /fbroadcast **:** Phát tin nhắn đến tất cả các nhóm đã tham gia liên đoàn của bạn
  • /check**:** kiểm tra người dùng
- • /xacnhan**:** xác nhận đã checkvoice người dùng
- • /huy**:** hủy xác nhận người dùng
+ • /xacnhan**:** xác nhận đã checkvoice người dùng và hủy cấm chat
+ • /huy**:** hủy xác nhận người dùng 
+ • /xn**:** xác nhận người dùng đã checkvoice
 
 **Lệnh người dùng:**
 • /fedinfo <Fed_ID>: Thông tin về một liên đoàn.
