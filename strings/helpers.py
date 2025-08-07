@@ -154,6 +154,7 @@ HELP_15 = """
 
   #  if data == "owner":
 HELP_14 = """
+<b><u>sᴏɴɢ ᴅᴏᴡɴʟᴏᴀᴅ</b></u>
 **👑 Lệnh cho chủ sở hữu liên đoàn:**
  • /newfed <tên_liên đoàn>**:** Tạo một Liên đoàn, Mỗi người dùng được phép tạo một Liên đoàn
  • /renamefed <ID_liên đoàn> <Tên_Mới_Của liên đoàn>**:** Đổi tên của liên đoàn thành tên mới bằng cách cung cấp ID
