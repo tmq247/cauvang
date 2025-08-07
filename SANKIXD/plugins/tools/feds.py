@@ -1019,7 +1019,7 @@ async def fmute_user(client, message):
 
 #Funmute
 
-@app.on_message(filters.command(["unfmute", "sunfmute", "aunfmute"]))
+@app.on_message(filters.command(["unfmute", "sunfmute", "xacnhan"]))
 @capture_err
 async def funmute_user(client, message):
     chat = message.chat
@@ -1072,7 +1072,7 @@ async def funmute_user(client, message):
         return await message.reply_text(
             f"**Người dùng {user.mention} đã bị Cấm chat trong liên đoàn.\n\nLý do: {reason}.\nNgày: {date}.**"
         )
-    if message.command[0][0] == "a":
+    if message.command[0][0] == "x":
         check_user2 = await check_actived_user(fed_id, user_id)
         if check_user2:
             reason = check_user2["reason"]
@@ -1140,7 +1140,7 @@ __**Lệnh bỏ cấm chat liên đoàn mới**__
 ##############
 
 #unactive
-@app.on_message(filters.command("huyxacnhan"))
+@app.on_message(filters.command("huy"))
 @capture_err
 async def unactive_user(client, message):
     chat = message.chat
@@ -1204,7 +1204,7 @@ __**Lệnh bỏ xác thực liên đoàn mới**__
             "Người dùng unactive, nhưng hành động unactive này không được ghi lại, hãy thêm tôi vào LOG_GROUP"
         )
 #xacnhan
-@app.on_message(filters.command("xacnhan"))
+@app.on_message(filters.command("xn"))
 @capture_err
 async def active_user(client, message):
     me = await app.get_me()
