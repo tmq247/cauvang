@@ -165,9 +165,9 @@ HELP_14 = """
  • /fdemote <user>**:** Xóa Người dùng khỏi quản trị Liên đoàn thành Người dùng bình thường
  • /setfedlog <ID_liên đoàn>**:** Đặt nhóm làm cơ sở báo cáo nhật ký được cung cấp cho liên đoàn
  • /unsetfedlog <fed_id>**:** Xóa nhóm làm cơ sở báo cáo nhật ký được cung cấp cho liên đoàn
- • /fbroadcast **:** Phát tin nhắn đến tất cả các nhóm đã tham gia liên đoàn của bạn 
+ • /fbroadcast **:** Phát tin nhắn đến tất cả các nhóm đã tham gia liên đoàn của bạn """
   
-**🔱 Lệnh cho QTV liên đoàn:**
+"""**🔱 Lệnh cho QTV liên đoàn:**
  • /fban <user> <reason>**:** cấm một người dùng
  • /sfban**:** cấm người dùng mà không gửi thông báo đến cuộc trò chuyện
  • /unfban <user> <reason>**:** Xóa người dùng khỏi lệnh cấm của liên đoàn
