@@ -10,6 +10,7 @@ import config
 from SANKIXD import app
 from SANKIXD.misc import _boot_
 from SANKIXD.plugins.sudo.sudoers import sudoers_list
+from SANKIXD.utils.dbfeds import check_banned_user, get_fed_id
 from SANKIXD.utils.database import get_served_chats, get_served_users, get_sudoers
 from SANKIXD.utils import bot_sys_stats
 from SANKIXD.utils.database import (
@@ -132,6 +133,16 @@ async def welcome(client, message: Message):
         try:
             language = await get_lang(message.chat.id)
             _ = get_string(language)
+            if member.id in SUDOERS:
+                return  # Ignore sudo users
+            fed_id = await get_fed_id(message.chat.id)
+            if fed_id:
+                check_user = await check_banned_user(fed_id, member.id)
+                if check_user:
+                    reason = check_user["reason"]
+                    date = check_user["date"]
+                    await message.chat.ban_member(member.id)
+                    return await app.send_message(message.chat.id, f"**Người dùng {member.mention} đã bị cấm trong liên đoàn.\n\Lý do: {reason}.\nNgày: {date}.**",)
             if await is_banned_user(member.id):
                 try:
                     await message.chat.ban_member(member.id)
