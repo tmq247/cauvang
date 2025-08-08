@@ -133,8 +133,8 @@ async def welcome(client, message: Message):
         try:
             language = await get_lang(message.chat.id)
             _ = get_string(language)
-            if member.id in SUDOERS:
-                return  # Ignore sudo users
+            #if member.id in SUDOERS:
+                #return  # Ignore sudo users
             fed_id = await get_fed_id(message.chat.id)
             if fed_id:
                 check_user = await check_banned_user(fed_id, member.id)
