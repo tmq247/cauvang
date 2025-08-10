@@ -1,3 +1,4 @@
+import asyncio
 from SANKIXD.core.bot import SANKI
 from SANKIXD.core.dir import dirr
 from SANKIXD.core.git import git
@@ -6,32 +7,36 @@ from SANKIXD.misc import dbb, heroku
 from pyrogram import Client
 from SafoneAPI import SafoneAPI
 from .logging import LOGGER
+
 #from aiohttp import ClientSession
 
-dirr()
-git()
-dbb()
-heroku()
+async def main():
+    dirr()
+    git()
+    dbb()
+    heroku()
 
-app = SANKI()
-api = SafoneAPI()
-userbot = Userbot()
-await userbot.start()
-await app.start()
-x = app.get_me()
-y = userbot.get_me()
+    app = SANKI()
+    api = SafoneAPI()
+    userbot = Userbot()
 
+    await userbot.start()
+    await app.start()
 
-BOT_ID = x.id
-USERBOT_ID = y.id
+    x = await app.get_me()
+    y = await userbot.get_me()
 
+    BOT_ID = x.id
+    USERBOT_ID = y.id
 
-from .platforms import *
+    from .platforms import *
+    Apple = AppleAPI()
+    Carbon = CarbonAPI()
+    SoundCloud = SoundAPI()
+    Spotify = SpotifyAPI()
+    Resso = RessoAPI()
+    Telegram = TeleAPI()
+    YouTube = YouTubeAPI()
 
-Apple = AppleAPI()
-Carbon = CarbonAPI()
-SoundCloud = SoundAPI()
-Spotify = SpotifyAPI()
-Resso = RessoAPI()
-Telegram = TeleAPI()
-YouTube = YouTubeAPI()
+if __name__ == "__main__":
+    asyncio.run(main())
