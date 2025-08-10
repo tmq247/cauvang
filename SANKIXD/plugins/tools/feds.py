@@ -833,7 +833,7 @@ async def fdel(client, message):
                     if served_chat != chat.id:
                         if not message.text.startswith("/s"):
                             await app.send_message(served_chat, f"**Bị xóa tin nhắn trong liên đoàn :{user.mention} !**")
-                await app2.delete_user_history(served_chat, user.id)
+                await userbot.delete_user_history(served_chat, user.id)
                 number_of_chats += 1
             await asyncio.sleep(1)
         except FloodWait as e:
