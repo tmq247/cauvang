@@ -1289,6 +1289,11 @@ __**Lệnh xác thực liên đoàn mới**__
 async def check(client, message):
     user_id = await extract_user(message)
     from_user = message.from_user
+    fed_id = await get_fed_id(chat.id)
+    if not fed_id:
+        return await message.reply_text(
+            "**Cuộc trò chuyện này không thuộc bất kỳ liên đoàn nào."
+        )
     if not user_id:
         return await message.reply_text("Tôi không thể tìm thấy người dùng đó.")
     user = await app.get_users(user_id)
