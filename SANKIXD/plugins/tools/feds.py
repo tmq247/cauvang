@@ -16,8 +16,8 @@ from pyrogram.types import (
 )
 from config import LOGGER_ID as LOG_GROUP_ID
 from SANKIXD.misc import SUDOERS
-
-from SANKIXD import app, userbot
+from SANKIXD.core.userbot import Userbot as userbot
+from SANKIXD import app#, userbot
 from SANKIXD.utils.errors import capture_err
 from SANKIXD.utils.dbfeds import *
 from SANKIXD.utils.functions import extract_user, extract_user_and_reason
