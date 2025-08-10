@@ -36,11 +36,12 @@ def capture_err(func):
             return
         except Exception as err:
             exc_type, exc_obj, exc_tb = sys.exc_info()
-            errors = traceback.format_exception(
+            errors = traceback.format_exception(type(e), e, e.__traceback__)
+            """errors = traceback.format_exception(
                 etype=exc_type,
                 value=exc_obj,
                 tb=exc_tb,
-            )
+            )"""
             error_feedback = split_limits(
                 "**ERROR** | `{}` | `{}`\n\n```{}```\n\n```{}```\n".format(
                     0 if not message.from_user else message.from_user.id,
