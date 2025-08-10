@@ -34,7 +34,7 @@ def capture_err(func):
         except ChatWriteForbidden:
             await app.leave_chat(message.chat.id)
             return
-        except Exception as err:
+        except Exception as e:
             exc_type, exc_obj, exc_tb = sys.exc_info()
             errors = traceback.format_exception(type(e), e, e.__traceback__)
             """errors = traceback.format_exception(
@@ -52,6 +52,6 @@ def capture_err(func):
             )
             for x in error_feedback:
                 await app.send_message(LOGGER, x)
-            raise err
+            raise e
 
     return capture
