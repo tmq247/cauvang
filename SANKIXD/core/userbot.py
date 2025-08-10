@@ -6,15 +6,6 @@ from ..logging import LOGGER
 
 assistants = []
 assistantids = []
-"""(proxy = {
-    "scheme": "MTProto proxy",  # Hỗ trợ "socks4", "socks5" và "http"
-    "hostname": "51.159.157.218",
-    "port": 7743,
-    "secret": "ee1603010200010001fc030386e24c3add726161682e6972"
-} )"""
-
-#app = Client("my_account", proxy=proxy)
-#app.run()
 
 class Userbot(Client):
     def __init__(self):
@@ -162,6 +153,21 @@ class Userbot(Client):
             assistantids.append(self.five.id)
             LOGGER(__name__).info(f"Trợ lý khởi động 5 là {self.five.name}")
 
+    async def get_me(self):
+        # Đảm bảo rằng ít nhất một trợ lý đã start
+        if config.STRING1 and self.one.is_connected:
+            return await self.one.get_me()
+        elif config.STRING2 and self.two.is_connected:
+            return await self.two.get_me()
+        elif config.STRING3 and self.three.is_connected:
+            return await self.three.get_me()
+        elif config.STRING4 and self.four.is_connected:
+            return await self.four.get_me()
+        elif config.STRING5 and self.five.is_connected:
+            return await self.five.get_me()
+        else:
+            raise RuntimeError("Chưa có trợ lý nào được kết nối. Hãy gọi await start() trước.")
+
     async def stop(self):
         LOGGER(__name__).info(f"Dừng trợ lý...")
         try:
@@ -177,3 +183,5 @@ class Userbot(Client):
                 await self.five.stop()
         except:
             pass
+
+
