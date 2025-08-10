@@ -778,6 +778,7 @@ async def fdel(client, message):
     chat = message.chat
     from_user = message.from_user
     me = await app.get_me()
+    app2 = await userbot.get_me()
     BOT_ID = me.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
@@ -826,7 +827,6 @@ async def fdel(client, message):
             except UserNotParticipant:
                 continue
             if chat_member.status == ChatMemberStatus.MEMBER:
-                app2 = userbot
                 admin = await app.get_chat_member(served_chat, app2.id)
                 if not admin.privileges.can_delete_messages:
                     return await message.reply_text("userbot không có quyền xóa tin nhắn người dùng này.")
@@ -838,8 +838,8 @@ async def fdel(client, message):
             await asyncio.sleep(1)
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
-        except Exception as e:
-            return await asyncio.sleep(int(e.value))
+        except Exception:
+            pass
     await m.edit(f"Đã xóa tin nhắn trong liên đoàn: {user.mention} !")
     try:
         await m.edit(
