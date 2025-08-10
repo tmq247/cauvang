@@ -691,10 +691,10 @@ async def fban_user(client, message):
         return await message.reply_text(
             "Bạn cần phải là Admin liên đoàn để sử dụng lệnh này"
         )
-    if len(message.command) < 2:
+    """if len(message.command) < 2:
         return await message.reply_text(
             "**Bạn cần chỉ định người dùng hoặc trả lời tin nhắn của họ!**"
-        )
+        )"""
     user_id, reason = await extract_user_and_reason(message)
     try:
         user = await app.get_users(user_id)
@@ -799,10 +799,10 @@ async def fdel(client, message):
         return await message.reply_text(
             "Bạn cần phải là Admin liên đoàn để sử dụng lệnh này"
         )
-    if len(message.command) < 2:
+    """if len(message.command) < 2:
         return await message.reply_text(
             "**Bạn cần chỉ định người dùng hoặc trả lời tin nhắn của họ!**"
-        )
+        )"""
     user_id = await extract_user(message)
     try:
         user = await app.get_users(user_id)
@@ -879,10 +879,10 @@ async def fmute_user(client, message):
         return await message.reply_text(
             "Bạn cần phải là Admin liên đoàn để sử dụng lệnh này"
         )
-    if len(message.command) < 2:
+    """if len(message.command) < 2:
         return await message.reply_text(
             "**Bạn cần chỉ định người dùng hoặc trả lời tin nhắn của họ!**"
-        )
+        )"""
     user_id, reason = await extract_user_and_reason(message)
     try:
         user = await app.get_users(user_id)
@@ -1046,10 +1046,10 @@ async def funmute_user(client, message):
         return await message.reply_text(
             "Bạn cần phải là Admin liên đoàn để sử dụng lệnh này"
         )
-    if len(message.command) < 2:
+    """if len(message.command) < 2:
         return await message.reply_text(
             "**Bạn cần phải chỉ định người dùng hoặc trả lời tin nhắn của họ!**"
-        )
+        )"""
     user_id, reason = await extract_user_and_reason(message)
     user = await app.get_users(user_id)
     if not user_id:
@@ -1167,10 +1167,10 @@ async def unactive_user(client, message):
         return await message.reply_text(
             "Bạn cần phải là Admin liên đoàn để sử dụng lệnh này"
         )
-    if len(message.command) < 2:
+    """if len(message.command) < 2:
         return await message.reply_text(
             "**Bạn cần phải chỉ định người dùng hoặc trả lời tin nhắn của họ!**"
-        )
+        )"""
     user_id, reason = await extract_user_and_reason(message)
     user = await app.get_users(user_id)
     if not user_id:
@@ -1231,10 +1231,10 @@ async def active_user(client, message):
         return await message.reply_text(
             "Bạn cần phải là Admin liên đoàn để sử dụng lệnh này"
         )
-    if len(message.command) < 2:
+   """ if len(message.command) < 2:
         return await message.reply_text(
             "**Bạn cần phải chỉ định người dùng hoặc trả lời tin nhắn của họ!**"
-        )
+        )"""
     user_id, reason = await extract_user_and_reason(message)
     user = await app.get_users(user_id)
     if not user_id:
@@ -1354,10 +1354,10 @@ async def funban_user(client, message):
         return await message.reply_text(
             "Bạn cần phải là Admin liên đoàn để sử dụng lệnh này"
         )
-    if len(message.command) < 2:
+    """if len(message.command) < 2:
         return await message.reply_text(
             "**Bạn cần phải chỉ định người dùng hoặc trả lời tin nhắn của họ!**"
-        )
+        )"""
     user_id, reason = await extract_user_and_reason(message)
     user = await app.get_users(user_id)
     if not user_id:
