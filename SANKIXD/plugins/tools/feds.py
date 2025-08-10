@@ -5,7 +5,7 @@ import html
 
 from pyrogram import filters
 from pyrogram.enums import ChatMemberStatus, ChatType, ParseMode
-from pyrogram.errors import FloodWait, PeerIdInvalid, ChatAdminRequired
+from pyrogram.errors import FloodWait, PeerIdInvalid, ChatAdminRequired, UserNotParticipant
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram.types import (
     CallbackQuery,
@@ -821,7 +821,10 @@ async def fdel(client, message):
     number_of_chats = 0
     for served_chat in served_chats:
         try:
-            chat_member = await app.get_chat_member(served_chat, user.id)
+            try:
+                chat_member = await app.get_chat_member(served_chat, user.id)
+            except UserNotParticipant:
+                continue
             if chat_member.status == ChatMemberStatus.MEMBER:
                 if not userbot.privileges.can_delete_messages:
                     return await message.reply_text("userbot không có quyền xóa tin nhắn người dùng này.")
