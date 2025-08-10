@@ -17,7 +17,7 @@ from pyrogram.types import (
 from config import LOGGER_ID as LOG_GROUP_ID
 from SANKIXD.misc import SUDOERS
 
-from SANKIXD import app, userbot, USERBOT_ID
+from SANKIXD import app, userbot#, USERBOT_ID
 from SANKIXD.utils.errors import capture_err
 from SANKIXD.utils.dbfeds import *
 from SANKIXD.utils.functions import extract_user, extract_user_and_reason
@@ -778,6 +778,7 @@ async def fdel(client, message):
     chat = message.chat
     from_user = message.from_user
     me = await app.get_me()
+    app2 = await userbot.get_me()
     BOT_ID = me.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
@@ -826,13 +827,13 @@ async def fdel(client, message):
             except UserNotParticipant:
                 continue
             if chat_member.status == ChatMemberStatus.MEMBER:
-                admin = await app.get_chat_member(served_chat, USERBOT_ID)
+                admin = await app.get_chat_member(served_chat, app2.id)
                 if not admin.privileges.can_delete_messages:
                     return await message.reply_text("userbot không có quyền xóa tin nhắn người dùng này.")
                     if served_chat != chat.id:
                         if not message.text.startswith("/s"):
                             await app.send_message(served_chat, f"**Bị xóa tin nhắn trong liên đoàn :{user.mention} !**")
-                await userbot.delete_user_history(served_chat, user.id)
+                await app2.delete_user_history(served_chat, user.id)
                 number_of_chats += 1
             await asyncio.sleep(1)
         except FloodWait as e:
