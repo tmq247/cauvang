@@ -824,11 +824,6 @@ async def fdel(client, message):
             chat_member = await app.get_chat_member(served_chat, user.id)
             if chat_member.status == ChatMemberStatus.MEMBER:
                 await userbot.delete_user_history(served_chat, user.id)
-                if served_chat != chat.id:
-                    if not message.text.startswith("/s"):
-                        await app.send_message(
-                            served_chat, f"**Bị xóa tin nhắn trong liên đoàn :{user.mention} !**"
-                        )
                 number_of_chats += 1
             await asyncio.sleep(1)
         except FloodWait as e:
@@ -838,7 +833,7 @@ async def fdel(client, message):
     await m.edit(f"Đã xóa tin nhắn trong liên đoàn: {user.mention} !")
     try:
         await m.edit(
-            f"Đã xóa tin nhắn {user.mention} trong liên đoàn !\nNhật ký hành động: {m2.link}",
+            f"Đã xóa tin nhắn {user.mention} trong liên đoàn !",
             disable_web_page_preview=True,
         )
     except Exception:
