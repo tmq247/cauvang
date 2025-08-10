@@ -16,8 +16,8 @@ heroku()
 app = SANKI()
 api = SafoneAPI()
 userbot = Userbot()
-x = await app.get_me()
-y = await userbot.get_me()
+x = app.get_me()
+y = userbot.get_me()
 
 BOT_ID = x.id
 USERBOT_ID = y.id
