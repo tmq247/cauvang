@@ -830,8 +830,8 @@ async def fdel(client, message):
             await asyncio.sleep(1)
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
-        except Exception:
-            pass
+        except Exception as e:
+            return await asyncio.sleep(int(e.value))
     await m.edit(f"Đã xóa tin nhắn trong liên đoàn: {user.mention} !")
     try:
         await m.edit(
