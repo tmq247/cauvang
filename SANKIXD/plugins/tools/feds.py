@@ -822,9 +822,11 @@ async def fdel(client, message):
     for served_chat in served_chats:
         try:
             chat_member = await app.get_chat_member(served_chat, user.id)
-            if chat_member.status == ChatMemberStatus.MEMBER:
-                await userbot.delete_user_history(served_chat, user.id)
-                number_of_chats += 1
+            #if chat_member.status == ChatMemberStatus.MEMBER:
+            if not userbot.privileges.can_delete_messages:
+                return await message.reply_text("userbot không có quyền xóa tin nhắn người dùng này.")
+            await userbot.delete_user_history(served_chat, user.id)
+            number_of_chats += 1
             await asyncio.sleep(1)
         except FloodWait as e:
             await asyncio.sleep(int(e.value))
