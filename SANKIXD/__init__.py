@@ -7,6 +7,7 @@ from SANKIXD.misc import dbb, heroku
 from pyrogram import Client
 from SafoneAPI import SafoneAPI
 from .logging import LOGGER
+from .platforms import *
 
 #from aiohttp import ClientSession
 
@@ -29,7 +30,7 @@ async def main():
     BOT_ID = x.id
     USERBOT_ID = y.id
 
-    from .platforms import *
+    
     Apple = AppleAPI()
     Carbon = CarbonAPI()
     SoundCloud = SoundAPI()
