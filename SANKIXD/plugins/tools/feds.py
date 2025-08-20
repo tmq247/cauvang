@@ -832,6 +832,7 @@ async def fdel(client, message):
                 continue
             #if chat_member.status == ChatMemberStatus.MEMBER:
             admin = await app.get_chat_member(served_chat, app2.id)
+            print(admin)
             if admin.status == ChatMemberStatus.ADMINISTRATOR:
                 checkadmin = admin.privileges.can_delete_messages
                 if not checkadmin:
