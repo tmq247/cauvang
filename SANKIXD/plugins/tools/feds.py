@@ -822,7 +822,8 @@ async def fdel(client, message):
     number_of_chats = 0
     if 1 in assistants:
         ubot = us.one
-        app2 = await ubot.get_me()
+        
+    app2 = await ubot.get_me()
     for served_chat in served_chats:
         try:
             try:
