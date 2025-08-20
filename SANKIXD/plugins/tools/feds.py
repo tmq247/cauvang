@@ -832,8 +832,10 @@ async def fdel(client, message):
                 continue
             #if chat_member.status == ChatMemberStatus.MEMBER:
             admin = await app.get_chat_member(served_chat, app2.id)
-            if not admin.privileges.can_delete_messages:
-                return await message.reply_text("userbot không có quyền xóa tin nhắn người dùng này.")
+            if admin.status == ChatMemberStatus.ADMINISTRATOR:
+                checkadmin = admin.privileges.can_delete_messages
+                if not checkadmin:
+                    return await message.reply_text("userbot không có quyền xóa tin nhắn người dùng này.")
             if served_chat != chat.id:
                 if not message.text.startswith("/s"):
                     await app.send_message(served_chat, f"**Bị xóa tin nhắn trong liên đoàn :{user.mention} !**")
