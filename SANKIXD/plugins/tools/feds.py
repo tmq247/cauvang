@@ -18,6 +18,7 @@ from config import LOGGER_ID as LOG_GROUP_ID
 from SANKIXD.misc import SUDOERS
 
 from SANKIXD import userbot as us, app
+from SANKIXD.core.userbot import assistants
 from SANKIXD.utils.errors import capture_err
 from SANKIXD.utils.dbfeds import *
 from SANKIXD.utils.functions import extract_user, extract_user_and_reason
