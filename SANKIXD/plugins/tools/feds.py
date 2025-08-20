@@ -17,7 +17,7 @@ from pyrogram.types import (
 from config import LOGGER_ID as LOG_GROUP_ID
 from SANKIXD.misc import SUDOERS
 
-from SANKIXD import app, userbot#, USERBOT_ID
+from SANKIXD import userbot as us, app
 from SANKIXD.utils.errors import capture_err
 from SANKIXD.utils.dbfeds import *
 from SANKIXD.utils.functions import extract_user, extract_user_and_reason
@@ -778,7 +778,6 @@ async def fdel(client, message):
     chat = message.chat
     from_user = message.from_user
     me = await app.get_me()
-    app2 = await userbot.get_me()
     BOT_ID = me.id
     if message.chat.type == ChatType.PRIVATE:
         return await message.reply_text(
@@ -820,6 +819,9 @@ async def fdel(client, message):
         + f" **Hành động này sẽ mất khoảng {len(served_chats)} giây.**"
     )
     number_of_chats = 0
+    if 1 in assistants:
+        ubot = us.one
+        app2 = await ubot.get_me()
     for served_chat in served_chats:
         try:
             try:
