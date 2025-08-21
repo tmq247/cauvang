@@ -834,12 +834,10 @@ async def fdel(client, message):
             admin = await app.get_chat_member(served_chat, app2.id)
             print(admin)
             if admin.status == ChatMemberStatus.ADMINISTRATOR:
-                checkadmin = admin.privileges.can_delete_messages
-                if not checkadmin:
-                    return await message.reply_text("userbot không có quyền xóa tin nhắn người dùng này.")
-            if served_chat != chat.id:
-                if not message.text.startswith("/s"):
-                    await app.send_message(served_chat, f"**Bị xóa tin nhắn trong liên đoàn :{user.mention} !**")
+                continue
+            checkadmin = admin.privileges.can_delete_messages
+            if not checkadmin:
+                return await message.reply_text("userbot không có quyền xóa tin nhắn người dùng này.")
             await ubot.delete_user_history(served_chat, user.id)
             number_of_chats += 1
             await asyncio.sleep(1)
