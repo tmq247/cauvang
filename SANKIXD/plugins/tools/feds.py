@@ -838,7 +838,7 @@ async def fdel(client, message):
             checkadmin = admin.privileges.can_delete_messages
             if not checkadmin:
                 return await app.send_message(served_chat, "userbot không có quyền xóa tin nhắn người dùng này.")
-            await ubot.delete_user_history(served_chat, user.id)
+            await app2.delete_user_history(served_chat, user.id)
             number_of_chats += 1
             await asyncio.sleep(1)
         except FloodWait as e:
