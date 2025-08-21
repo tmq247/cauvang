@@ -828,6 +828,7 @@ async def fdel(client, message):
         try:
             try:
                 chat_member = await app.get_chat_member(served_chat, user.id)
+                chat_member = await ubot.get_chat_member(served_chat, user.id)
             except UserNotParticipant:
                 continue
             #if chat_member.status == ChatMemberStatus.MEMBER:
